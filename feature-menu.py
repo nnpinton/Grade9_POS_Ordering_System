@@ -34,6 +34,7 @@ def get_order():
         name, price = menu[choice]
         subtotal = price * qty
         order.append({"name": name, "price": price, "qty": qty, "subtotal": subtotal})
+        print("Added:", qty, "x", name)
 
         while True:
             more = input("Order another product? (y/n): ").lower()
