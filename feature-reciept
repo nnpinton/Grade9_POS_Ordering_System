@@ -1,0 +1,115 @@
+class Customer:
+    def __init__(self, name, item_amount):
+        # Save the patient's name and bill amount.
+        self.__name = name
+        self.set_item_amount(item_amount)
+
+    def get_name(self):
+        return self.__name
+
+    def set_name(self, name):
+        self.__name = name
+
+    def get_item_amount(self):
+        return self.__item_amount
+
+    def set_item_amount(self, item_amount):
+        try:
+            item_amount = float(item_amount)
+        except (ValueError, TypeError):
+            raise ValueError("Amount must be a valid number.")
+
+        if item_amount < 0:
+            raise ValueError("Amount cannot be negative.")
+
+        self.__item_amount = item_amount
+
+    def calculate_item(self):
+        # Regular patients pay the full amount.
+        return self.get_item_amount()
+
+    def calculate_savings(self):
+        return self.get_item_amount() - self.calculate_savings()
+
+    def calculate_balance(self, amount_paid):
+        # Get the amount still left to pay.
+        try:
+            amount_paid = float(amount_paid)
+        except (ValueError, TypeError):
+            raise ValueError("Payment must be a valid number.")
+
+        if amount_paid < 0:
+            raise ValueError("Payment cannot be negative.")
+
+        return max(0, self.calculate_bill() - amount_paid)
+
+    def get_payment_status(self, amount_paid):
+        # Check if the bill is paid or still has a balance.
+        balance = self.calculate_balance(amount_paid)
+
+        if amount_paid <= 0:
+            return "Unpaid"
+        elif balance > 0:
+            return "Partially Paid"
+        else:
+            return "Fully Paid"
+
+
+# Add some sample patients.
+regular_customer = Customer("Juan Dela Cruz", 15000)
+
+customer = [regular_customer]
+
+print("STORE BILLING SYSTEM")
+print("-----------------------")
+
+total_savings = 0
+total_collected = 0
+total_balance = 0
+
+for customer in customer:
+    original_bill = customer.get_item_amount()
+    final_bill = customer.calculate_amount()
+    savings = customer.calculate_savings()
+
+    print(f"\nCustomer Name: {Customer.get_name()}")
+    print(f"Original Bill: ₱{original_bill:,.2f}")
+    print(f"Final Bill: ₱{final_bill:,.2f}")
+
+    # Keep asking until a valid payment is entered.
+    amount_valid = False
+
+    while not amount_valid:
+        try:
+            amount_paid = float(input("Enter amount paid: ₱"))
+
+            if amount_paid < 0:
+                print("Payment cannot be negative. Try again.")
+            else:
+                amount_valid = True
+
+        except ValueError:
+            print("Please enter a valid amount.")
+
+    balance = Customer.calculate_balance(amount_paid)
+    status = Customer.get_payment_status(amount_paid)
+
+    # Count only the amount needed to pay the bill.
+    payment_applied = min(amount_paid, final_bill)
+
+    print(f"Amount Paid: ₱{amount_paid:,.2f}")
+    print(f"Remaining Balance: ₱{balance:,.2f}")
+    print(f"Payment Status: {status}")
+
+    if amount_paid > final_bill:
+        print(f"Overpayment: ₱{amount_paid - final_bill:,.2f}")
+
+    total_savings += savings
+    total_collected += payment_applied
+    total_balance += balance
+
+print("\n-----------------------")
+print("STORE SUMMARY")
+print("-----------------------")
+print(f"Total Payments Applied: ₱{total_collected:,.2f}")
+print(f"Total Outstanding Balance: ₱{total_balance:,.2f}")
