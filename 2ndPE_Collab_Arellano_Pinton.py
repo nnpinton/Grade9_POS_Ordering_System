@@ -55,11 +55,11 @@ def print_receipt(order):
     print("=" * 40)
     print("Friend and Fries".center(40))
     print("=" * 40)
-    print(f"{'Item':<14}{'Qty':<6}{'Price':<10}{'Subtotal'}")
+    print(f"{'Item':<12}\tQty\tPrice\tSubtotal")
     print("-" * 40)
 
     for item in order:
-        print(f"{item['name']:<14}{item['qty']:<6}{item['price']:<10.2f}{item['subtotal']:.2f}")
+        print(f"{item['name']:<12}\t{item['qty']}\t{item['price']:.2f}\t{item['subtotal']:.2f}")
         total += item["subtotal"]
 
     print("-" * 40)
